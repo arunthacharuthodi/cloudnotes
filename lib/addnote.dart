@@ -2,12 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class Addnote extends StatelessWidget {
+class Addnote extends StatefulWidget {
 
+  @override
+  _AddnoteState createState() => _AddnoteState();
+}
+
+class _AddnoteState extends State<Addnote> {
   TextEditingController title = TextEditingController();
+
   TextEditingController content = TextEditingController();
-  // CollectionReference ref = FirebaseFirestore.instance.collection("notes");   
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     CollectionReference ref = FirebaseFirestore.instance.collection(_auth.currentUser.uid);
@@ -20,7 +27,7 @@ class Addnote extends StatelessWidget {
               'content':content.text
             }).whenComplete(() => Navigator.pop(context));
           }, 
-          child: Text("save"))
+          child: Text("save", style: TextStyle(color: Colors.white,),))
         ],
       ),
       body: Container(
@@ -28,36 +35,37 @@ class Addnote extends StatelessWidget {
         child: Column(
           
           children: [
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all()
-            ),
-            child: TextField(
-              controller: title,
-              decoration: InputDecoration(
-                hintText: "title", 
-
-              ),
-            )
-          ),
+          TextFormField(
+            controller: title,
+                  decoration: InputDecoration(hintText: "title",
+                  contentPadding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                  border: OutlineInputBorder(
+                     borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderSide: BorderSide(color: Colors.black12, width: 2),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderSide: BorderSide(color: Colors.black12, width: 2),
+                  ),
+                  ),),
           SizedBox(height: 20,),
            Expanded(
-                      child: Container(
-              decoration: BoxDecoration(
-                border: Border.all()
-              ),
-              child: TextField(
-                controller: content,
-                maxLines: null,
-                expands: true,
-                decoration: InputDecoration(
-                  hintText: "content", 
-                  
-                  
-                ),
-              )
+                      child:TextFormField(
+                        maxLines: 20,
+                        controller: content,
+                  decoration: InputDecoration(hintText: "write here!!",
+                  contentPadding: EdgeInsets.fromLTRB(20, 20, 0, 0),
+                  border: OutlineInputBorder(
+                     borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderSide: BorderSide(color: Colors.black12, width: 2),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderSide: BorderSide(color: Colors.black12, width: 2),
+                  ),
+                  ),),
           ),
-           )
+           
         ],),
       ),
     );

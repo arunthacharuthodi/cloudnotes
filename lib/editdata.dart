@@ -33,7 +33,7 @@ class _EditNoteState extends State<EditNote> {
             //   'content':content.text
             // }).whenComplete(() => Navigator.pop(context));
           }, 
-          child: Text("delete")),
+          child: Text("delete", style: TextStyle(color: Colors.white,))),
 
           FlatButton(onPressed: (){
             widget.docToEdit.reference.update({
@@ -45,44 +45,44 @@ class _EditNoteState extends State<EditNote> {
             //   'content':content.text
             // }).whenComplete(() => Navigator.pop(context));
           }, 
-          child: Text("save"))
+          child: Text("save", style: TextStyle(color: Colors.white,)))
         ],
       ),
       body: Container(
         margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         child: Column(
           
-          children: [
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all()
-            ),
-            child: TextField(
-              controller: title,
-              decoration: InputDecoration(
-                hintText: "title", 
-
-              ),
-            )
-          ),
+          children: [TextFormField(
+            controller: title,
+                  decoration: InputDecoration(hintText: "title",
+                  contentPadding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                  border: OutlineInputBorder(
+                     borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderSide: BorderSide(color: Colors.black12, width: 2),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderSide: BorderSide(color: Colors.black12, width: 2),
+                  ),
+                  ),),
           SizedBox(height: 20,),
            Expanded(
-                      child: Container(
-              decoration: BoxDecoration(
-                border: Border.all()
-              ),
-              child: TextField(
-                controller: content,
-                maxLines: null,
-                expands: true,
-                decoration: InputDecoration(
-                  hintText: "content", 
-                  
-                  
-                ),
-              )
+                      child:TextFormField(
+                        maxLines: 20,
+                        controller: content,
+                  decoration: InputDecoration(hintText: "write here!!",
+                  contentPadding: EdgeInsets.fromLTRB(20, 20, 0, 0),
+                  border: OutlineInputBorder(
+                     borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderSide: BorderSide(color: Colors.black12, width: 2),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderSide: BorderSide(color: Colors.black12, width: 2),
+                  ),
+                  ),),
           ),
-           )
+           
         ],),
       ),
     );

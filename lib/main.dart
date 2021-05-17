@@ -1,3 +1,4 @@
+import 'package:cloudnotes/screens/emailVerification.dart';
 import 'package:cloudnotes/test.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,8 +28,9 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-        title: 'Firebase Authentication',
+        title: 'cloud notes',
         home: Authenticate(),
+        theme: ThemeData(appBarTheme: AppBarTheme(color: Colors.amber.shade900)),
       ),
     );
   }
@@ -40,7 +42,11 @@ class Authenticate extends StatelessWidget {
     final firebaseUser = context.watch<User>();
 
     if (firebaseUser != null) {
-      return TestScreen();
+      User user = FirebaseAuth.instance.currentUser;
+      if (user.emailVerified == true){
+        return TestScreen();
+      }
+      return Email();
     }
     return SignIn();
   }
