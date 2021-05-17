@@ -31,7 +31,6 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(context),
       body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: SingleChildScrollView(
@@ -110,7 +109,7 @@ class _SignInState extends State<SignIn> {
                   print('User is currently signed out!');
                   
                 } else {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => TestScreen()));
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) => TestScreen()));
                 }
               });
               setState(() {
@@ -121,7 +120,7 @@ class _SignInState extends State<SignIn> {
                   child: Container(
             width: MediaQuery.of(context).size.width,
             padding: EdgeInsets.symmetric(vertical: 15,),
-            child: Text("Next",style: TextStyle(fontSize: 18, color: Colors.white, ),textAlign: TextAlign.center),
+            child: Text("SignUp",style: TextStyle(fontSize: 18, color: Colors.white, ),textAlign: TextAlign.center),
             decoration: BoxDecoration(
       gradient: LinearGradient(colors: [
           const Color(0xff007EF4),
