@@ -1,3 +1,4 @@
+import 'package:cloudnotes/screens/forgotpassword.dart';
 import 'package:cloudnotes/screens/signup.dart';
 import 'package:cloudnotes/test.dart';
 import 'package:cloudnotes/widgets/widgets.dart';
@@ -23,7 +24,7 @@ class _SignInState extends State<SignIn> {
   TextEditingController signinpasswordController = TextEditingController();
   bool signinvalidateemail = false;
   bool signinvalidatepassword = false;
-  bool usrnotfound,passwordincorrect;
+  String _errorLogin;
     final _auth = FirebaseAuth.instance;
 
 
@@ -39,7 +40,14 @@ class _SignInState extends State<SignIn> {
                             child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: <Widget>[
+          SizedBox(
+            height: 40,
+          ),
+          alertBox2(),
+          SizedBox(
+            height: 40,
+          ),
         TextFormField(
           controller: signinemailController,
            decoration: InputDecoration(
@@ -70,13 +78,18 @@ class _SignInState extends State<SignIn> {
           ),
         ),
         SizedBox(height: 10,),
-        Container(
-          alignment: Alignment.centerRight,
-          child: Padding(
+        GestureDetector(
+          onTap: (){
+             Navigator.push(context, MaterialPageRoute(builder: (_)=> ForgotPassword()));
+          },
+                  child: Container(
+            alignment: Alignment.centerRight,
+            child: Padding(
       padding: EdgeInsets.symmetric(vertical: 8),
       child: Container(
-        child: Text("forgot your password?"),
+          child: Text("forgot your password?"),
       ),
+            ),
           ),
         ),
         SizedBox(height: 40,),
@@ -84,21 +97,29 @@ class _SignInState extends State<SignIn> {
           onTap: () async {
             try{
               
-               _auth.signInWithEmailAndPassword(email: signinemailController.text, password: signinpasswordController.text);
+               UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: signinemailController.text, password: signinpasswordController.text);
+               
                final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                sharedPreferences.setString('email', signinemailController.text);
 
             }on FirebaseAuthException catch (e) {
                 if (e.code == 'user-not-found' && signinemailController.text.isEmpty == false && signinpasswordController.text.isEmpty == false) {
                 
-                
+                  setState(() {
+                    _errorLogin = "user not found, if new please signup";
+                  });
             
                 
                 } else if (e.code == 'wrong-password' && signinemailController.text.isEmpty == false && signinpasswordController.text.isEmpty == false) {
                   setState(() {
-                    passwordincorrect = true;
+                    _errorLogin = "password is incorrect ";
                   });
-                  print('Wrong password provided for that user.');
+                  // print('Wrong password provided for that user.');
+                } else if (e.code == 'invalid-email' && signinemailController.text.isEmpty == false && signinpasswordController.text.isEmpty == false) {
+                  setState(() {
+                    _errorLogin = e.message;
+                  });
+                  // print('Wrong password provided for that user.');
                 }
               }
 
@@ -120,7 +141,7 @@ class _SignInState extends State<SignIn> {
                   child: Container(
             width: MediaQuery.of(context).size.width,
             padding: EdgeInsets.symmetric(vertical: 15,),
-            child: Text("SignUp",style: TextStyle(fontSize: 18, color: Colors.white, ),textAlign: TextAlign.center),
+            child: Text("SignIn",style: TextStyle(fontSize: 18, color: Colors.white, ),textAlign: TextAlign.center),
             decoration: BoxDecoration(
       gradient: LinearGradient(colors: [
           const Color(0xff007EF4),
@@ -158,4 +179,37 @@ class _SignInState extends State<SignIn> {
           ),
     );
   }
+  Widget alertBox2(){
+  if(_errorLogin != null){
+    return Row(
+      
+      children: [
+        Expanded(
+          
+              child: Center(
+                child: Container(
+            height: 40,
+            decoration: BoxDecoration(
+                color: Colors.blue[200],
+                borderRadius: BorderRadius.circular(10)
+            ),
+            child:Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Icon(Icons.warning_rounded, color: Colors.red,),
+                 Text("$_errorLogin",textAlign: TextAlign.center, style: TextStyle(color: Colors.black54),)
+              ],
+            )
+          ),
+              ),
+        ),
+      ],
+    );
+  }else{
+    return SizedBox(
+      height: 20,
+    );
+  }
+
+}
 }

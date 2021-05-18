@@ -42,11 +42,7 @@ class Authenticate extends StatelessWidget {
     final firebaseUser = context.watch<User>();
 
     if (firebaseUser != null) {
-      User user = FirebaseAuth.instance.currentUser;
-      if (user.emailVerified == true){
-        return TestScreen();
-      }
-      return Email();
+      return TestScreen();
     }
     return SignIn();
   }
